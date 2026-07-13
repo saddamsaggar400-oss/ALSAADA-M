@@ -1,0 +1,2 @@
+- [Vercel + pnpm monorepo deploy](vercel-deploy.md) — vercel.json must be at repo root; build filter is `--filter @workspace/alsaada-m`; Replit plugins must be conditional on REPL_ID
+- [Firebase config pattern](firebase-config.md) — VITE_FIREBASE_* env vars with hardcoded fallbacks in firebase.ts; Analytics removed entirely (causes app-offline error in sandboxed envs)

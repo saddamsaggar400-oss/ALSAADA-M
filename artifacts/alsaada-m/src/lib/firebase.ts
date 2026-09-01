@@ -7,14 +7,14 @@ function envOrFallback(value: unknown, fallback: string) {
 }
 
 const firebaseConfig = {
-  apiKey:            envOrFallback(import.meta.env.VITE_FIREBASE_API_KEY, "AIzaSyDbqRHcS5xozE26ANS5RxYGjnQMlwwb8gM"),
-  authDomain:        envOrFallback(import.meta.env.VITE_FIREBASE_AUTH_DOMAIN, "asaad-dobae.firebaseapp.com"),
-  databaseURL:       envOrFallback(import.meta.env.VITE_FIREBASE_DATABASE_URL, "https://asaad-dobae-default-rtdb.firebaseio.com"),
-  projectId:         envOrFallback(import.meta.env.VITE_FIREBASE_PROJECT_ID, "asaad-dobae"),
-  storageBucket:     envOrFallback(import.meta.env.VITE_FIREBASE_STORAGE_BUCKET, "asaad-dobae.firebasestorage.app"),
-  messagingSenderId: envOrFallback(import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID, "879581253100"),
-  appId:             envOrFallback(import.meta.env.VITE_FIREBASE_APP_ID, "1:879581253100:web:7b793aeb3cd11c593e04c9"),
-  measurementId:     envOrFallback(import.meta.env.VITE_FIREBASE_MEASUREMENT_ID, "G-GMX3ZBRL5R"),
+  apiKey: "AIzaSyC0e36QlnWyK1s3VYPaJGIlrYbtna-pmYU",
+  authDomain: "dsdsghghg.firebaseapp.com",
+  databaseURL: "https://dsdsghghg-default-rtdb.firebaseio.com",
+  projectId: "dsdsghghg",
+  storageBucket: "dsdsghghg.firebasestorage.app",
+  messagingSenderId: "311506232004",
+  appId: "1:311506232004:web:534a056226f23f4ae61f91",
+  measurementId: "G-4Z71P85S1J"
 };
 
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];

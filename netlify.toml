@@ -1,0 +1,13 @@
+[build]
+  command = "pnpm install --frozen-lockfile && PORT=5173 BASE_PATH=/ pnpm --filter @workspace/alsaada-m run build"
+  publish = "artifacts/alsaada-m/dist/public"
+
+[build.environment]
+  NODE_VERSION = "20"
+  BASE_PATH = "/"
+  PORT = "5173"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

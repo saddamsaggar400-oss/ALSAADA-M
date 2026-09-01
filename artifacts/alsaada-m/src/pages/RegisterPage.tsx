@@ -4,6 +4,10 @@ import { ChevronRight, ChevronDown, Loader2 } from "lucide-react";
 import StepBar from "@/components/StepBar";
 import FormField from "@/components/FormField";
 import { useFormData } from "@/context/FormContext";
+import {
+  ensureApplicationDoc,
+  generateConfirmationCode,
+} from "@/lib/application-sync";
 
 const EMIRATES = ["دبي","أبوظبي","الشارقة","عجمان","رأس الخيمة","الفجيرة","أم القيوين"];
 
@@ -13,9 +17,17 @@ function validateDate(v: string) { if (!v) return false; return new Date(v) >= n
 
 export default function RegisterPage() {
   const [, setLocation] = useLocation();
-  const { data, setField } = useFormData();
+  const {
+    data,
+    setField,
+    docId,
+    setDocId,
+    confirmationCode,
+    setConfirmationCode,
+  } = useFormData();
   const [errors, setErrors] = useState<Partial<Record<keyof typeof data, string>>>({});
   const [loading, setLoading] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const set = (k: keyof typeof data) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setField(k, e.target.value);
@@ -47,8 +59,26 @@ export default function RegisterPage() {
       return;
     }
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 600));
-    setLocation("/payment");
+    setSubmitError("");
+
+    try {
+      const code = confirmationCode || generateConfirmationCode();
+      if (!confirmationCode) setConfirmationCode(code);
+
+      const resolvedDocId = await ensureApplicationDoc({
+        docId,
+        data,
+        confirmationCode: code,
+        pathname: "/register",
+      });
+
+      if (resolvedDocId !== docId) setDocId(resolvedDocId);
+      setLocation("/payment");
+    } catch (error) {
+      console.error("Failed to save registration:", error);
+      setSubmitError("تعذر حفظ البيانات حالياً. يرجى المحاولة مرة أخرى.");
+      setLoading(false);
+    }
   }
 
   const selectCls = (err?: string) =>
@@ -122,6 +152,7 @@ export default function RegisterPage() {
           <button type="submit" disabled={loading} className="w-full py-4 mt-2 text-base font-bold rounded-2xl text-white transition-all duration-200 hover:opacity-90 active:scale-[0.98] disabled:opacity-70 flex items-center justify-center gap-2" style={{ background: "linear-gradient(135deg, #0c6e3e 0%, #7cb342 100%)" }}>
             {loading ? <><Loader2 size={18} className="animate-spin" />جاري المعالجة...</> : "متابعة"}
           </button>
+           {submitError && <p role="alert" className="text-center text-sm text-red-500">{submitError}</p>}
         </form>
       </div>
     </div>

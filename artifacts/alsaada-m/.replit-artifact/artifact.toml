@@ -1,13 +1,10 @@
 kind = "web"
 previewPath = "/"
 title = "بطاقة إسعاد | Esaad Card"
+description = "A responsive Arabic registration experience for UAE families applying for an Esaad membership card, with benefits, payment, verification, and confirmation flows."
 version = "1.0.0"
 id = "artifacts/alsaada-m"
 router = "path"
-
-[[integratedSkills]]
-name = "react-vite"
-version = "1.0.0"
 
 [[services]]
 name = "web"
@@ -19,8 +16,8 @@ run = "pnpm --filter @workspace/alsaada-m run dev"
 
 [services.production]
 build = [ "pnpm", "--filter", "@workspace/alsaada-m", "run", "build" ]
-publicDir = "artifacts/alsaada-m/dist/public"
 serve = "static"
+publicDir = "artifacts/alsaada-m/dist/public"
 
 [[services.production.rewrites]]
 from = "/*"

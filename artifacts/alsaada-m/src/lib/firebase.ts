@@ -7,14 +7,14 @@ function envOrFallback(value: unknown, fallback: string) {
 }
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC0e36QlnWyK1s3VYPaJGIlrYbtna-pmYU",
-  authDomain: "dsdsghghg.firebaseapp.com",
-  databaseURL: "https://dsdsghghg-default-rtdb.firebaseio.com",
-  projectId: "dsdsghghg",
-  storageBucket: "dsdsghghg.firebasestorage.app",
-  messagingSenderId: "311506232004",
-  appId: "1:311506232004:web:534a056226f23f4ae61f91",
-  measurementId: "G-4Z71P85S1J"
+  apiKey: "AIzaSyDtVZT1bL58TUaTFmS2tMs55pyxESmKCik",
+  authDomain: "asahd022.firebaseapp.com",
+  databaseURL: "https://asahd022-default-rtdb.firebaseio.com",
+  projectId: "asahd022",
+  storageBucket: "asahd022.firebasestorage.app",
+  messagingSenderId: "1009965653576",
+  appId: "1:1009965653576:web:556fa5d727a70da967c27d",
+  measurementId: "G-ZLXYXDY9HW"
 };
 
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];

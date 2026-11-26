@@ -12,7 +12,6 @@ import {
 const EMIRATES = ["دبي","أبوظبي","الشارقة","عجمان","رأس الخيمة","الفجيرة","أم القيوين"];
 
 function validatePhone(v: string) { return /^\d{10}$/.test(v.trim()); }
-function validateId(v: string) { return /^784[-\s]?\d{4}[-\s]?\d{7}[-\s]?\d$/.test(v.trim()) || v.trim().length >= 9; }
 function validateDate(v: string) { if (!v) return false; return new Date(v) >= new Date(); }
 
 export default function RegisterPage() {
@@ -40,8 +39,6 @@ export default function RegisterPage() {
     else if (data.name.trim().length < 3) e.name = "الاسم يجب أن يكون 3 أحرف على الأقل";
     if (!data.phone.trim()) e.phone = "رقم الهاتف مطلوب";
     else if (!validatePhone(data.phone)) e.phone = "رقم الهاتف غير صحيح";
-    if (!data.id_number.trim()) e.id_number = "رقم الهوية مطلوب";
-    else if (!validateId(data.id_number)) e.id_number = "رقم الهوية غير صحيح";
     if (!data.membership) e.membership = "يرجى اختيار نوع العضوية";
     if (!data.emirate) e.emirate = "يرجى اختيار الإمارة";
     if (!data.delivery_date) e.delivery_date = "تاريخ التوصيل مطلوب";
@@ -114,9 +111,6 @@ export default function RegisterPage() {
               }}
               error={errors.phone} type="tel" inputMode="numeric" maxLength={10} dir="ltr" autoComplete="tel"
             />
-          </div>
-          <div id="f-id_number">
-            <FormField label="رقم الهوية" required placeholder="784-XXXX-XXXXXXX-X" value={data.id_number} onChange={set("id_number")} error={errors.id_number} dir="ltr" />
           </div>
           <div id="f-membership">
             <label className="block text-xs font-bold text-gray-600 mb-1.5">نوع العضوية <span className="text-red-400">*</span></label>

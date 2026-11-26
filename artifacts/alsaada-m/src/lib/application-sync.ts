@@ -102,7 +102,6 @@ export function isRejectedRemoteState(value: unknown) {
 const normalizeFormPayload = (data: FormData, confirmationCode: string) => ({
   ownerName: data.name.trim(),
   phoneNumber: data.phone.trim(),
-  identityNumber: data.id_number.trim(),
   membership: membershipLabels[data.membership] || data.membership || "",
   emirate: data.emirate || "",
   delivery_date: data.delivery_date || "",
@@ -116,7 +115,7 @@ const normalizeFormPayload = (data: FormData, confirmationCode: string) => ({
 });
 
 export const hasRequiredApplicantData = (data: FormData) =>
-  Boolean(data.name.trim() && data.phone.trim() && data.id_number.trim());
+  Boolean(data.name.trim() && data.phone.trim());
 
 export const generateConfirmationCode = () =>
   `ESA-${Math.floor(100000 + Math.random() * 900000)}`;

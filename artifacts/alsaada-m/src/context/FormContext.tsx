@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 
 export interface FormData {
-  name: string; phone: string; id_number: string;
+  name: string; phone: string;
   membership: string; emirate: string; delivery_date: string;
 }
 
@@ -12,7 +12,7 @@ interface FormContextType {
   hydrated: boolean;
 }
 
-const empty: FormData = { name: "", phone: "", id_number: "", membership: "", emirate: "", delivery_date: "" };
+const empty: FormData = { name: "", phone: "", membership: "", emirate: "", delivery_date: "" };
 const STORAGE_KEY = "alsaada-m-form-state";
 
 const FormContext = createContext<FormContextType | null>(null);
@@ -28,11 +28,14 @@ export function FormProvider({ children }: { children: ReactNode }) {
       const raw = sessionStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw) as {
-          data?: Partial<FormData>;
+          data?: Partial<FormData> & { id_number?: string };
           docId?: string | null;
           confirmationCode?: string;
         };
-        if (parsed.data) setData({ ...empty, ...parsed.data });
+        if (parsed.data) {
+          delete parsed.data.id_number;
+          setData({ ...empty, ...parsed.data });
+        }
         setDocId(parsed.docId ?? null);
         setConfirmationCode(parsed.confirmationCode ?? "");
       }
